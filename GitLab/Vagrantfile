@@ -10,8 +10,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :virtualbox do |vb|
     vb.name = "GitLab"
-    vb.memory = 1024
-    vb.cpus = 2
+    vb.memory = 2048
+    vb.cpus = 8
   end
 
   # Salt Provisioner
@@ -21,13 +21,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     salt.minion_config = "saltstack/etc/minion"
 
     # On provision, run state.highstate (which installs packages, services, etc).
-    # Highstate basicly means "comapre the VMs current machine state against
+    # Highstate basicly means "compare the VMs current machine state against
     # what it should be and make changes if necessary".
     salt.run_highstate = true
 
     # Run in verbose mode, so it will output all debug info to the console.
-    # This is nice to have when you are testing things out. Once you know they
-    # work well you can comment this line out.
     salt.verbose = true
   end
+
+  config.vm.network "forwarded_port", guest: 80, host: 8888
 end
