@@ -1,6 +1,8 @@
 ## Look locally for files
 file_client: local
 
+id: hop-stack
+
 ## Where your salt states & files are located
 file_roots:
   base:
@@ -10,3 +12,9 @@ file_roots:
 pillar_roots:
   base:
     - /vagrant/saltstack/pillar
+
+grains:
+  admin_pw: hop
+  db_pw: hop
+  rabbit_pw: hop
+  svc_pw: hop

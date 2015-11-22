@@ -1,0 +1,8 @@
+[[local|localrc]]
+ADMIN_PASSWORD={{ grains['admin_pw'] }}
+DATABASE_PASSWORD={{ grains['db_pw'] }}
+RABBIT_PASSWORD={{ grains['rabbit_pw'] }}
+SERVICE_PASSWORD={{ grains['svc_pw'] }}
+SERVICE_TOKEN=a682f596-76f3-11e3-b3b2-e716f9080d50
+LOGFILE=$DEST/logs/stack.sh.log
+LOGDAYS=1
