@@ -2,6 +2,16 @@ brightbox_ppa_repository:
   pkgrepo.managed:
     - humanname: Brightbox PPA
     - ppa: brightbox/ruby-ng
+evarlast_golang15_ppa_repository:
+  pkgrepo.managed:
+    - humanname: Everlast golang1.5 PPA
+    - ppa: evarlast/golang1.5
+    - dist: trusty
+evarlast_golang14_ppa_repository:
+  pkgrepo.managed:
+    - humanname: Everlast golang1.4 PPA
+    - ppa: evarlast/golang1.4
+    - dist: trusty
 remove_packages:
   pkg.purged:
     - pkgs:
@@ -13,12 +23,14 @@ install_packages:
       - strace
       - ca-certificates
       - postfix
+      - python-software-properties
       - git-core
       - postgresql
       - postgresql-client
       - libpq-dev
       - ruby2.1
       - ruby2.1-dev
+      - golang
       - build-essential
       - zlib1g-dev
       - libyaml-dev
@@ -41,13 +53,6 @@ install_packages:
       - cmake
       - nodejs
       - nginx
-install_golang:
-  pkg.installed:
-    - sources:
-      - golang-doc: https://launchpad.net/ubuntu/+source/golang/2:1.5.1-0ubuntu2/+build/8131742/+files/golang-doc_1.5.1-0ubuntu2_all.deb
-      - golang-src: https://launchpad.net/ubuntu/+source/golang/2:1.5.1-0ubuntu2/+build/8131742/+files/golang-src_1.5.1-0ubuntu2_amd64.deb
-      - golang-go: https://launchpad.net/ubuntu/+source/golang/2:1.5.1-0ubuntu2/+build/8131742/+files/golang-go_1.5.1-0ubuntu2_amd64.deb
-      - golang: https://launchpad.net/ubuntu/+source/golang/2:1.5.1-0ubuntu2/+build/8131742/+files/golang_1.5.1-0ubuntu2_all.deb
 bundler:
   gem.installed:
     - ri: False

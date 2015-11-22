@@ -3,5 +3,5 @@ postgresql_database:
     - name: git
     - createdb: True
   postgres_database.present:
-    - name: gitlab
+    - name: gitlabhq_production
     - owner: git

@@ -8,13 +8,26 @@ gitlab_config:
   file.copy:
     - name: /home/git/gitlab/config/gitlab.yml
     - source: /home/git/gitlab/config/gitlab.yml.example
-gitlab_secrets:
+gitlab_init_script:
   file.copy:
-    - name: /home/git/gitlab/config/secrets.yml
-    - source: /home/git/gitlab/config/secrets.yml.example
-/home/git/gitlab/config/secrets.yml:
+    - name: /etc/init.d/gitlab
+    - source: /home/git/gitlab/lib/support/init.d/gitlab
+    - user: root
+update-rc.d gitlab defaults 21:
+  cmd.run:
+    - user: root
+gitlab:
+  service.running:
+    - watch:
+      - file: /home/git/gitlab/*
+gitlab_secrets:
   file.managed:
-    - file_mode: 600
+    - name: /home/git/gitlab/config/secrets.yml
+    - user: git
+    - group: git
+    - mode: 0600
+    - source: salt://template/secrets.yaml.template
+    - template: jinja
 /home/git/gitlab/log:
   file.directory:
     - dir_mode: 755
@@ -93,14 +106,6 @@ yes 'yes' | bundle exec rake gitlab:setup RAILS_ENV=production:
   cmd.run:
     - cwd: /home/git/gitlab
     - user: git
-gitlab_init_script:
-  file.copy:
-    - name: /etc/init.d/gitlab
-    - source: /home/git/gitlab/lib/support/init.d/gitlab
-    - user: root
-update-rc.d gitlab defaults 21:
-  cmd.run:
-    - user: root
 gitlab_logrotate:
   file.copy:
     - name: /etc/logrotate.d/gitlab
