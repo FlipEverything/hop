@@ -8,6 +8,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Vagrant Box
   config.vm.box = "ubuntu/trusty64"
 
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "GitLab"
+    vb.memory = 1024
+    vb.cpus = 2
+  end
+
   # Salt Provisioner
   config.vm.provision :salt do |salt|
     # Relative location of configuration file to use for minion
