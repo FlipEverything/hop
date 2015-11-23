@@ -18,3 +18,4 @@ grains:
   db_pw: hop
   rabbit_pw: hop
   svc_pw: hop
+  token: a682f596-76f3-11e3-b3b2-e716f9080d50
