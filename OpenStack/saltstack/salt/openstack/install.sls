@@ -8,7 +8,7 @@ openstack_install:
     - user: stack
     - group: stack
     - mode: 0644
-    - source: salt://openstack/localrc.template
+    - source: salt://openstack/local_conf.template
     - template: jinja
   cmd.run:
     - name: /var/lib/stack/devstack/stack.sh

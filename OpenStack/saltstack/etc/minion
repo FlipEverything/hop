@@ -8,7 +8,7 @@ file_roots:
   base:
     - /vagrant/saltstack/salt
 
-## Where your Pillar data is located (see README.md for more details)
+## Where your Pillar data is located
 pillar_roots:
   base:
     - /vagrant/saltstack/pillar
