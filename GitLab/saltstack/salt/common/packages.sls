@@ -1,29 +1,38 @@
+install_system_packages:
+  pkg.installed:
+    - pkgs:
+      - python-software-properties
 brightbox_ppa_repository:
   pkgrepo.managed:
-    - humanname: Brightbox PPA
     - ppa: brightbox/ruby-ng
-evarlast_golang15_ppa_repository:
+ubuntu_lxc_ppa_repository:
   pkgrepo.managed:
-    - humanname: Everlast golang1.5 PPA
-    - ppa: evarlast/golang1.5
-    - dist: trusty
-evarlast_golang14_ppa_repository:
-  pkgrepo.managed:
-    - humanname: Everlast golang1.4 PPA
-    - ppa: evarlast/golang1.4
-    - dist: trusty
+    - ppa: ubuntu-lxc/lxd-stable
 remove_packages:
   pkg.purged:
     - pkgs:
+      - ruby
+      - ruby-dev
+      - postgresql
+      - postgresql-client
+      - libpq-dev
       - ruby1.9.1
+      - ruby1.9.1-dev
+      - ruby2.1
+      - ruby2.1-dev
+      - golang
+      - redis-server
+      - nodejs
+      - nginx
+apt-get -y autoremove --purge:
+  cmd.run:
+    - user: root
 install_packages:
   pkg.installed:
     - pkgs:
       - htop
       - strace
       - ca-certificates
-      - postfix
-      - python-software-properties
       - git-core
       - postgresql
       - postgresql-client
@@ -44,7 +53,7 @@ install_packages:
       - redis-server
       - checkinstall
       - libxml2-dev
-      - libxslt-dev
+      - libxslt1-dev
       - libcurl4-openssl-dev
       - libicu-dev
       - logrotate

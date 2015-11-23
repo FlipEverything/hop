@@ -10,11 +10,3 @@ file_roots:
 pillar_roots:
   base:
     - /vagrant/saltstack/pillar
-
-grains:
-  db_key_base:
-    production: FcC.Pqm3g~.=vx?dEe,>YcU'.(W@DX3[QX3/35"c
-    development: development
-    test: test
-  nginx:
-    fqdn: gitlab-test.dev

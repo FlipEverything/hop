@@ -1,3 +1,5 @@
+{% from "config/map.jinja" import config with context %}
+
 nginx:
   service.running:
     - watch:
@@ -13,7 +15,7 @@ replace_fqdn:
     - pattern: |
         server_name YOUR_SERVER_FQDN;.*
     - repl: |
-        server_name {{ grains['nginx']['fqdn'] }};
+        server_name {{ salt['pillar.get']('config:lookup:nginx:fqdn') }};
 /etc/nginx/sites-enabled/gitlab:
   file.symlink:
     - target: /etc/nginx/sites-available/gitlab

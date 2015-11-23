@@ -1,3 +1,5 @@
+{% from "config/map.jinja" import config with context %}
+
 gitlab_git:
   git.latest:
     - name: https://gitlab.com/gitlab-org/gitlab-ce.git
@@ -8,18 +10,6 @@ gitlab_config:
   file.copy:
     - name: /home/git/gitlab/config/gitlab.yml
     - source: /home/git/gitlab/config/gitlab.yml.example
-gitlab_init_script:
-  file.copy:
-    - name: /etc/init.d/gitlab
-    - source: /home/git/gitlab/lib/support/init.d/gitlab
-    - user: root
-update-rc.d gitlab defaults 21:
-  cmd.run:
-    - user: root
-gitlab:
-  service.running:
-    - watch:
-      - file: /home/git/gitlab/*
 gitlab_secrets:
   file.managed:
     - name: /home/git/gitlab/config/secrets.yml
@@ -102,10 +92,22 @@ gitlab-workhorse_make:
     - cwd: /home/git/gitlab-workhorse
     - user: git
     - name: make
-yes 'yes' | bundle exec rake gitlab:setup RAILS_ENV=production:
+yes 'yes' | bundle exec rake gitlab:setup RAILS_ENV=production GITLAB_ROOT_PASSWORD={{ salt['pillar.get']('config:lookup:gitlab:root_password') }}:
   cmd.run:
     - cwd: /home/git/gitlab
     - user: git
+gitlab_init_script:
+  file.copy:
+    - name: /etc/init.d/gitlab
+    - source: /home/git/gitlab/lib/support/init.d/gitlab
+    - user: root
+update-rc.d gitlab defaults 21:
+  cmd.run:
+    - user: root
+gitlab:
+  service.running:
+    - watch:
+      - file: /home/git/gitlab/*
 gitlab_logrotate:
   file.copy:
     - name: /etc/logrotate.d/gitlab

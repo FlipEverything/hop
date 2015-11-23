@@ -1,0 +1,3 @@
+{% set config = salt['grains.filter_by']({
+
+}, merge=salt['pillar.get']('config:lookup')) %}
