@@ -5,23 +5,26 @@ Vagrant.configure(2) do |config|
 
   config.vm.hostname = "hop-openstack"
 
+  # eth1, this will be the endpoint
+  config.vm.network :private_network, ip: "192.168.27.100"
+  # eth2, this will be the OpenStack "public" network
+  # ip and subnet mask should match floating_ip_range var in devstack.yml
+  config.vm.network :private_network, ip: "172.24.4.225", :netmask => "255.255.255.0", :auto_config => false
+
   config.vm.provider :virtualbox do |vb|
     vb.name = "OpenStack"
     vb.memory = 8196
     vb.cpus = 4
+    vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
   end
 
   config.vm.provision :salt do |salt|
     salt.minion_config = "saltstack/etc/minion"
     salt.run_highstate = true
     salt.verbose = true
+    salt.grains({
+      floating_range: '172.24.4.0/24'
+    })
   end
 
-  config.vm.network "forwarded_port", guest: 80, host: 8888
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
-  config.vm.network "forwarded_port", guest: 443, host: 8443
-  config.vm.network "forwarded_port", guest: 873, host: 873
-  config.vm.network "forwarded_port", guest: 3260, host: 3260
-  config.vm.network "forwarded_port", guest: 3306, host: 3306
-  config.vm.network "forwarded_port", guest: 5672, host: 5672
 end

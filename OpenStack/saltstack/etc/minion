@@ -18,4 +18,5 @@ grains:
   db_pw: hop
   rabbit_pw: hop
   svc_pw: hop
+  floating_range: 172.24.4.0/24
   token: a682f596-76f3-11e3-b3b2-e716f9080d50

@@ -8,3 +8,21 @@ SERVICE_TOKEN={{ grains['token'] }}
 # Logging
 LOGFILE=$DEST/logs/stack.sh.log
 LOGDAYS=1
+# Networking
+HOST_IP={{ ip }}
+FLOATING_RANGE={{ grains['floating_range'] }}
+
+# Neuron
+disable_service n-net
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+enable_service neutron
+
+# Disable security groups entirely
+Q_USE_SECGROUP=False
+LIBVIRT_FIREWALL_DRIVER=nova.virt.firewall.NoopFirewallDriver
+
+disable_service tempest

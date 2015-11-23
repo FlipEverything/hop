@@ -10,6 +10,15 @@ openstack_install:
     - mode: 0644
     - source: salt://openstack/local_conf.template
     - template: jinja
+    - context:
+        ip: {{ salt['network.interfaces']()['eth1']['inet'][0]['address'] }}
+
+enable_eth2:
+  cmd.run:
+    - name: ip link set dev eth2 up
+    - user: root
+
+run_stack:
   cmd.run:
     - name: /var/lib/stack/devstack/stack.sh
     - cwd: /var/lib/stack/devstack
