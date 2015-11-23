@@ -15,3 +15,11 @@ openstack_install:
     - cwd: /var/lib/stack/devstack
     - user: stack
     - shell: /bin/bash
+
+add_keypair:
+  cmd.script:
+    - name: salt://openstack/add_key.sh
+    - user: stack
+    - group: stack
+    - shell: /bin/bash
+    - cwd: /var/lib/stack/devstack
