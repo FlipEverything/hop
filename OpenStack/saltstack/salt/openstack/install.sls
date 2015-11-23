@@ -2,16 +2,16 @@ openstack_install:
   git.latest:
     - name: https://git.openstack.org/openstack-dev/devstack
     - user: stack
-    - target: /tmp/devstack
+    - target: /var/lib/stack/devstack
   file.managed:
-    - name: /tmp/devstack/local.conf
+    - name: /var/lib/stack/devstack/local.conf
     - user: stack
     - group: stack
     - mode: 0644
     - source: salt://openstack/localrc.template
     - template: jinja
   cmd.run:
-    - name: /tmp/devstack/stack.sh
-    - cwd: /tmp/devstack
+    - name: /var/lib/stack/devstack/stack.sh
+    - cwd: /var/lib/stack/devstack
     - user: stack
     - shell: /bin/bash
