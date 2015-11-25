@@ -1,67 +1,39 @@
-# GitLab telepitese SaltStackel
+# Install GitLab with SaltStack
 
-Ez a repo a Szegedi Tudomanyegyetem Halozati Operacios Rendszerek (HOP) gyakorlati kurzusara keszult projektmunkat tartalmazza. A GitLab rendszer telepiteset vegeztuk el SaltStackel.
+This repository contains the saltstack configuration files for our classroom project at University of Szeged. We'll propose two methods below to install GitLab. GitLab is a web-based Git repository manager with wiki and issue tracking features similar to GitHub. Unlike GitHub you can use GitLab on third-party servers.
 
-**Keszitette:**
- - Dobo Laszlo (GitLab mappa)
- - Maroy Andras (OpenStack mappa)
+The first method is to install GitLab in a VirtualBox VM. You can run VirtualBox on several platforms. VirtualBox is a Type-2 hypervisor that runs on a conventional operating system just as other programs do.
 
-## 1. Elofeltetelek
+The second method is to install GitLab in a SaltStack VM. OpenStack software controls large pools of compute, storage, and networking resources throughout a datacenter, managed through a dashboard or via the OpenStack API. OpenStack works with popular enterprise and open source technologies making it ideal for heterogeneous infrastructure.
 
-### 1.1. Kulonallo VirtualBox gepre valo telepites eseten
+We'll create the Virtual Machines using Vagrant.
+
+## 1. Install GitLab locally in a VirtualBox VM
+
+### 1.1. Prerequisites
  - [VirtualBox](https://www.virtualbox.org/)
  - [Vagrant](https://www.vagrantup.com/)
- - [Salty Vagrant Grains](https://github.com/ahmadsherif/salty-vagrant-grains)
 
-### 1.2. OpenStackbe valo telepites eseten
-WIP
- - [Vagrant OpenStack Provider](https://github.com/cloudbau/vagrant-openstack-plugin)
+### 1.2. Virtual Machine configuration
 
-## 2. Telepites
+Vagrant will create the Virtual Machine automatically based on the [Vagrantfile](GitLab/Vagrantfile) placed in the GitLab directory.
 
-### 2.1. GitLab telepitese kulonallo VirtualBox gepre
+You can customize the name that appears in the VirtualBox GUI by setting the vb.name property. For memory and CPU settings you can set the vb.cpus and vb.memory properties. The config.vm.network configures networks on the machine. Currently it is set to bridge mode with a static IP address.
 
-```sh
-:~$ cd [git-repo]/GitLab
-:~$ vagrant up --provider=virtualbox
+```ruby
+config.vm.provider :virtualbox do |vb|
+  vb.name = "GitLab"
+  vb.memory = 2048
+  vb.cpus = 8
+end
+
+config.vm.network "public_network", ip: "192.168.0.17", bridge: "Realtek PCIe GBE Family Controller"
 ```
 
-Ez a parancs letrehoz egy, a Vagrantfile-ban definialt VirtualBox VM-et, "GitLab" nevvel. A gep letrehozasa utan elindul a provision folyamat, amely a SaltStack-et hasznalva, az elore definialt utasitasokkal feltelepiti a GitLab-ot a VM-re.
+### 1.3. GitLab configuration
+You can set some variables in the [SaltStack configuration file](GitLab/saltstack/pillar/config.sls) placed in the GitLab directory.
 
-A telepitesi folyamat a [hivatalos GitLab dokumentacio](https://github.com/gitlabhq/gitlabhq/blob/master/doc/install/installation.md) alapjan hajtodik vegre.
-
-### 2.2. OpenStack telepites kulonallo VirtualBox gepre
-
-**Fontos a futtatashoz szukseg van egy vagrant pluginre:**
-```sh
-vagrant plugin install salty-vagrant-grains
-```
-
-Ezutan:
-
-```sh
-:~$ cd [git-repo]/OpenStack
-:~$ vagrant up --provider=virtualbox
-```
-
-Ez a parancs letrehoz egy, a Vagrantfile-ban definialt VirtualBox VM-et, "OpenStack" nevvel. A gep letrehozasa utan elindul a provision folyamat, amely a SaltStack-et hasznalva, az elore definialt utasitasokkal feltelepiti az OpenStack-et a VM-re.
-
-A telepitesi folyamat a [DevStack script](http://docs.openstack.org/developer/devstack) segitsegevel tortenik.
-
-### 2.3. GitLab telepitese OpenStackbe
-
-WIP
-
-## 3. Konfiguracio
-
-### 3.1. GitLab
-A GitLab SaltStack konfiguracios fajl a kovetkezo eleresi uton talalhato:
-
-```sh
-[git-repo]/GitLab/saltstack/pillar/config.sls
-```
-
-A konfiguracios fajlban a kovetkezo beallitasi lehetosegek allnak rendelkezesre:
+Below you can see an example configuration:
 
 ```yaml
 config:
@@ -75,40 +47,63 @@ config:
     gitlab:
       root_password: valami!biztonsagos2015
 ```
-### 3.2. Vagrant
 
-A VirtualBox VM konfiguracioja a kovetkezo fajlban erheto el:
-
-```sh
-[git-repo]/GitLab/Vagrantfile
-```
-
-A ket legfontosabb konfiguralasi lehetoseg:
+### 1.4. GitLab installation
+Execute the following commands to create a Virtual Machine. After the creation Vagrant'll run the provisioning process.
 
 ```sh
-config.vm.provider
-config.vm.network
+:~$ cd [git-repo]/GitLab
+:~$ vagrant up --provider=virtualbox
 ```
 
-A **config.vm.provider** valtozoban a letrejovo gep hardware konfiguraciojat tudjuk allitani. A **config.vm.network**-ben pedig a halozati interfeszt, mely jelenleg egy nyilvanos, bridgelt kartya lesz, mely a hoszt gep halozatara fog kapcsolodni a megadott halozati kartyan keresztul, ami aktualisan a "Realtek PCIe GBE Family Controller" eszkoz. Van lehetoseg fix IP cim megadasara is (pl.: 192.168.0.17).
+After this command you'll have a VM that runs GitLab. The provisioning process is based on the [official installation guide](https://github.com/gitlabhq/gitlabhq/blob/master/doc/install/installation.md).
 
-### 3.3 OpenStack
+### 1.5. Running
 
-A konfiguraciohoz szukseges valtozok a [minion file](OpenStack/saltstack/etc/minion)-ban vannak leirva
+Visit the IP address set in the [Vagrantfile](GitLab/Vagrantfile) or the FQDN set in the [SaltStack configuration file](GitLab/saltstack/pillar/config.sls) in your web browser for your first GitLab login:
 
-Itt az alabbi valtozok allitasara van lehetoseg:
+```sh
+http://192.168.0.17
+http://gitlab-test.dev
+```
+NOTE: You have to map the hostname to the IP address.
+
+The setup has created a default admin account for you:
+
+```
+Username: root
+Password: set in config.sls
+```
+### 1.6. Screenshot
+![alt text](screenshot.png "Kepernyokep")
+
+## 2. Install GitLab in an OpenStack VM
+
+### 2.1. Prerequisites
+ - [VirtualBox](https://www.virtualbox.org/)
+ - [Vagrant](https://www.vagrantup.com/)
+ - [Salty Vagrant Grains](https://github.com/ahmadsherif/salty-vagrant-grains)
+ - [Vagrant OpenStack Provider](https://github.com/cloudbau/vagrant-openstack-plugin)
+
+### 2.2. OpenStack configuration
+
+You can set the needed OpenStack configuration variables in the [minion file](OpenStack/saltstack/etc/minion).
+
+Example OpenStack configuration:
 ```yaml
-  admin_pw: hop     # Admin jelszo
-  db_pw: hop        # Adatbazis jelszo
-  rabbit_pw: hop    # RabbitMQ jelszo
-  svc_pw: hop       # Service jelszo
-  floating_range: 172.24.4.0/24     # A VM-ek kivolrol elerheto cimtartomanya
-  token: a682f596-76f3-11e3-b3b2-e716f9080d50   # Authentikacios token
+  admin_pw: hop     # Administrator password
+  db_pw: hop        # Database password
+  rabbit_pw: hop    # RabbitMQ password
+  svc_pw: hop       # Service password
+  floating_range: 172.24.4.0/24     # The externally accessible network address range
+  token: a682f596-76f3-11e3-b3b2-e716f9080d50   # Authentication token
 ```
 
-Tovabba a [Vagrantfile](OpenStack/Vagrantfile)-ban talalhatoak meg fontos beallitasok:
+You can find the Virtual Machine's configuration in the [Vagrantfile](OpenStack/Vagrantfile).
+
+Example Vagrantfile:
 ```ruby
-  # Ezen a cimen lehet majd elerni az OpenStack-et
+  # OpenStack will listen on this IP address
   config.vm.network :private_network, ip: "192.168.27.100"
   # Az itt megadott ip cimnek a lentebbi 'floating_range' tartomanyba kell esnie!
   config.vm.network :private_network, ip: "172.24.4.225", :netmask => "255.255.255.0", :auto_config => false
@@ -126,30 +121,54 @@ Tovabba a [Vagrantfile](OpenStack/Vagrantfile)-ban talalhatoak meg fontos bealli
     # ...
 ```
 
-## 4. Futtatas
+### 2.3. Install OpenStack locally in a VirtualBox VM
 
-A Vagrantfile-ban megadott IP cimen es az FQDN-en, bongeszobol erhetjuk el:
+**You have to install this plugin to run the script:**
+```sh
+vagrant plugin install salty-vagrant-grains
+```
+
+Execute the following commands to install OpenStack:
 
 ```sh
-# GitLab:
-http://192.168.0.17
-http://gitlab-test.dev
+:~$ cd [git-repo]/OpenStack
+:~$ vagrant up --provider=virtualbox
+```
 
-# OpenStack:
+After the execution of the commands above you'll have a VirtualBox VM called 'OpenStack'. After the first boot Vagrant will start the provisioning process which will install OpenStack using SaltStack.
+
+The provisioning is created with the help of the [DevStack script](http://docs.openstack.org/developer/devstack).
+
+### 2.4. Install GitLab in an OpenStack VM
+
+WIP
+
+
+### 2.5. Running
+
+Visit the IP address set in the Vagrantfile or the FQDN in your web browser:
+
+```sh
 http://192.168.27.100/dashboard
 ```
-Megj: a megfelelo /etc/host vagy DNS szerver rekordot letre kell hoznunk.
-
+Login details
 
 ```sh
-# GitLab:
-Felhasznalonev: root
-Jelszo: a config.sls-ben megadott
-
-# OpenStack
-Felhasznalonev: admin / demo
-Jelszo: a config.sls-ben megadott
+Username: admin / demo
+Password: set in config.sls
 ```
 
-Kepernyokep:
-![alt text](screenshot.png "Kepernyokep")
+### 3. Appendix
+
+**Created by:**
+ - Laszlo DOBO (GitLab directory)
+ - Andras MAROY (OpenStack directory)
+
+**Sources:**
+ - [Vagrant DOCS](https://docs.vagrantup.com/v2/)
+ - [SaltStack Docs](https://docs.saltstack.com/en/latest/ref/states/all/index.html)
+ - [OpenStack Wiki](https://wiki.openstack.org/wiki/Main_Page)
+ - [Salt formula](https://github.com/saltstack-formulas/salt-formula)
+ - [Brightbox PPA - ruby2.1](https://www.brightbox.com/blog/2014/01/09/ruby-2-1-ubuntu-packages/)
+ - [LXC PPA - golang1.5.1](https://launchpad.net/~ubuntu-lxc/+archive/ubuntu/lxd-stable)
+ - [ubuntu/trusty64 vagrant box](https://atlas.hashicorp.com/ubuntu/boxes/trusty64)
