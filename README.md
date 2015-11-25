@@ -1,10 +1,10 @@
 # Install GitLab with SaltStack
 
-This repository contains the saltstack configuration files for our classroom project at University of Szeged. We'll propose two methods below to install GitLab. GitLab is a web-based Git repository manager with wiki and issue tracking features similar to GitHub. Unlike GitHub you can use GitLab on third-party servers.
+This repository contains the saltstack configuration files for our classroom project at University of Szeged. We'll propose two methods to install GitLab. GitLab is a web-based Git repository manager with wiki and issue tracking features similar to GitHub. Unlike GitHub you can use GitLab on third-party servers.
 
 The first method is to install GitLab in a VirtualBox VM. You can run VirtualBox on several platforms. VirtualBox is a Type-2 hypervisor that runs on a conventional operating system just as other programs do.
 
-The second method is to install GitLab in a SaltStack VM. OpenStack software controls large pools of compute, storage, and networking resources throughout a datacenter, managed through a dashboard or via the OpenStack API. OpenStack works with popular enterprise and open source technologies making it ideal for heterogeneous infrastructure.
+The second method is to install GitLab in an OpenStack VM. OpenStack software controls large pools of compute, storage, and networking resources throughout a datacenter, managed through a dashboard or via the OpenStack API. OpenStack works with popular enterprise and open source technologies making it ideal for heterogeneous infrastructure.
 
 We'll create the Virtual Machines using Vagrant.
 
