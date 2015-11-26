@@ -6,7 +6,7 @@ The first method is to install GitLab in a VirtualBox VM. You can run VirtualBox
 
 The second method is to install GitLab in an OpenStack VM. OpenStack software controls large pools of compute, storage, and networking resources throughout a datacenter, managed through a dashboard or via the OpenStack API. OpenStack works with popular enterprise and open source technologies making it ideal for heterogeneous infrastructure.
 
-We'll create the Virtual Machines using Vagrant.
+We'll create the Virtual Machines using Vagrant. Vagrant is a tool for building complete development environments. With an easy-to-use workflow and focus on automation, Vagrant lowers development environment setup time, increases development/production parity, and makes the "works on my machine" excuse a relic of the past.
 
 ## 1. Install GitLab locally in a VirtualBox VM
 
