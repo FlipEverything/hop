@@ -6,3 +6,10 @@ openstack_networking:
 virsh net-destroy default:
   cmd.run:
     - user: root
+
+network_rules:
+  cmd.script:
+    - name: salt://openstack/networking.sh
+    - user: stack
+    - group: stack
+    - shell: /bin/bash

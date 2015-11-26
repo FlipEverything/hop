@@ -31,4 +31,10 @@ add_keypair:
     - user: stack
     - group: stack
     - shell: /bin/bash
-    - cwd: /var/lib/stack/devstack
+
+add_ubuntu:
+  cmd.script:
+    - name: salt://openstack/add_ubuntu.sh
+    - user: stack
+    - group: stack
+    - shell: /bin/bash
