@@ -12,6 +12,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.name = "GitLab"
     vb.memory = 2048
     vb.cpus = 8
+
+    config.vm.network "public_network", ip: "192.168.0.17", bridge: "Realtek PCIe GBE Family Controller"
+  end
+
+  config.vm.provider :openstack do |os|
+    # Credentials
+    os.username           = 'admin'
+    os.password           = 'hop'
+    os.tenant_name        = 'demo'
+    os.openstack_auth_url = 'http://192.168.27.100:5000/v2.0'
+
+    # VM Config
+    os.server_name        = 'vagrant-test'
+    os.flavor             = 'm1.small'
+    os.image              = 'ubuntu/trusty64'
+    os.security_groups    = ['default']
+
+    # Floating IPs
+    os.floating_ip_pool   = 'public'
+
+    # SSH authentication
+    os.keypair_name       = 'admin'
+    os.ssh_timeout        = 400
+
+    config.vm.provision "shell", path: "update_dns.sh"
+
+    config.ssh.username         = 'ubuntu'
+    config.ssh.private_key_path = "../OpenStack/saltstack/salt/openstack/id_rsa"
   end
 
   # Salt Provisioner
@@ -29,5 +57,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     salt.verbose = true
   end
 
-  config.vm.network "public_network", ip: "192.168.0.17", bridge: "Realtek PCIe GBE Family Controller"
 end
