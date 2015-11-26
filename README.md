@@ -105,7 +105,7 @@ Example Vagrantfile:
 ```ruby
   # OpenStack will listen on this IP address
   config.vm.network :private_network, ip: "192.168.27.100"
-  # Az itt megadott ip cimnek a lentebbi 'floating_range' tartomanyba kell esnie!
+  # The IP set here has to be in the floating range set below
   config.vm.network :private_network, ip: "172.24.4.225", :netmask => "255.255.255.0", :auto_config => false
 
   config.vm.provider :virtualbox do |vb|
@@ -116,7 +116,7 @@ Example Vagrantfile:
   config.vm.provision :salt do |salt|
     # ...
     salt.grains({
-      # Ebben a tartomanyban lesznek elerhetoek az OpenStack-ben letrehozott virtualis gepeink
+      # The virtual machines running in openstack will have public addresses in this range
       floating_range: '172.24.4.0/24'
     # ...
 ```
@@ -141,8 +141,10 @@ The provisioning is created with the help of the [DevStack script](http://docs.o
 
 ### 2.4. Install GitLab in an OpenStack VM
 
-WIP
-
+```sh
+:~$ cd [git-repo]/GitLab
+:~$ vagrant up --provider=openstack
+```
 
 ### 2.5. Running
 
