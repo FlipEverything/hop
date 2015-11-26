@@ -121,7 +121,47 @@ Example Vagrantfile:
     # ...
 ```
 
-### 2.3. Install OpenStack locally in a VirtualBox VM
+### 2.3 Allow VMs to connect out to the Internet
+
+By default, VMs started by OpenStack will not be able to connect to the
+internet. For this to work, your host machine must be configured to do NAT
+(Network Address Translation) for the VMs.
+
+### On Mac OS X
+
+#### Enable IP forwarding
+
+Turn on IP forwarding if it isn't on yet:
+
+    sudo sysctl -w net.inet.ip.forwarding=1
+
+Note that you have to do this each time you reboot.
+
+#### Edit the pfctl config file to NAT the floating IP subnet
+
+Edit `/etc/pf.conf` as root, and add the following line after the "net-anchor" line:
+
+    nat on en0 from 172.24.4.1/24 -> (en0)
+
+#### Load the file and enable PF
+
+    sudo pfctl -f /etc/pf.conf
+    sudo pfctl -e
+
+(From [Martin Nash's blog][6]. See info there on how to make the IP forwarding
+persist across reboots ).
+
+
+### On Linux
+
+To enable NAT, issue the following commands in your host, as root:
+
+```
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+```
+
+### 2.4. Install OpenStack locally in a VirtualBox VM
 
 **You have to install this plugin to run the script:**
 ```sh
@@ -139,14 +179,14 @@ After the execution of the commands above you'll have a VirtualBox VM called 'Op
 
 The provisioning is created with the help of the [DevStack script](http://docs.openstack.org/developer/devstack).
 
-### 2.4. Install GitLab in an OpenStack VM
+### 2.5. Install GitLab in an OpenStack VM
 
 ```sh
 :~$ cd [git-repo]/GitLab
 :~$ vagrant up --provider=openstack
 ```
 
-### 2.5. Running
+### 2.6. Running
 
 Visit the IP address set in the Vagrantfile or the FQDN in your web browser:
 
