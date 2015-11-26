@@ -83,7 +83,7 @@ Password: set in config.sls
  - [VirtualBox](https://www.virtualbox.org/)
  - [Vagrant](https://www.vagrantup.com/)
  - [Salty Vagrant Grains](https://github.com/ahmadsherif/salty-vagrant-grains)
- - [Vagrant OpenStack Provider](https://github.com/cloudbau/vagrant-openstack-plugin)
+ - [Vagrant OpenStack Provider](https://github.com/ggiamarchi/vagrant-openstack-provider)
 
 ### 2.2. OpenStack configuration
 
@@ -166,6 +166,7 @@ iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 **You have to install this plugin to run the script:**
 ```sh
 vagrant plugin install salty-vagrant-grains
+vagrant plugin install vagrant-openstack-provider
 ```
 
 Execute the following commands to install OpenStack:
