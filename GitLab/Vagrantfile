@@ -8,15 +8,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Vagrant Box
   config.vm.box = "ubuntu/trusty64"
 
-  config.vm.provider :virtualbox do |vb|
+  config.vm.provider :virtualbox do |vb, override|
     vb.name = "GitLab"
     vb.memory = 2048
     vb.cpus = 8
 
-    config.vm.network "public_network", ip: "192.168.0.17", bridge: "Realtek PCIe GBE Family Controller"
+    override.vm.network "public_network", ip: "192.168.0.17", bridge: "Realtek PCIe GBE Family Controller"
   end
 
-  config.vm.provider :openstack do |os|
+  config.vm.provider :openstack do |os, override|
     # Credentials
     os.username           = 'admin'
     os.password           = 'hop'
@@ -36,10 +36,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     os.keypair_name       = 'admin'
     os.ssh_timeout        = 400
 
-    config.vm.provision "shell", path: "update_dns.sh"
+    override.vm.provision "shell", path: "update_dns.sh"
 
-    config.ssh.username         = 'ubuntu'
-    config.ssh.private_key_path = "../OpenStack/saltstack/salt/openstack/id_rsa"
+    override.ssh.username         = 'ubuntu'
+    override.ssh.private_key_path = "../OpenStack/saltstack/salt/openstack/id_rsa"
   end
 
   # Salt Provisioner
